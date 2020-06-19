@@ -5,40 +5,43 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 #in µm²
-SMALL_THRESHOLD = 0.1   # 0.01  100x100 nm
-MEDIUM_THRESHOLD = 0.5  #0.04  200x200 nm
+SMALL_THRESHOLD = 0.1   # 0.01  100x100 nm  #0.1 for test data
+MEDIUM_THRESHOLD = 0.5  #0.04  200x200 nm  #0.5 for test data
 
 def main():
     table_path = get_table_path()
     filename = "bax-cluster-areas_Sarah.csv"
-    filename = "test_table.csv"
-    file_path = os.path.join(table_path, filename)
+    # file = os.path.join(table_path, filename)
+    file = "test_table.csv"
 
-    #print(file_path)
 
-    #read in the table with Pandas package
+    #print(filepath)
+
+    size_thresholds = ["small clusters up to " + str(SMALL_THRESHOLD) + "µm²:", "medium clusters up to " + str(MEDIUM_THRESHOLD) + "µm²:", "large clusters larger than " + str(MEDIUM_THRESHOLD) + "µm²:"]
+    print(size_thresholds)
+
+    frequency_table, headers_str = create_frequency_table(file)
+
+    # frequency_table.insert(0, size_thresholds)  ##TODO: row headers
+
+    np_table = np.asarray(frequency_table)
+    print("\n", np_table)
+
+    transposed = np.transpose(np_table)
+    print("\n", transposed)
+
+
+    # save the table and give it headers
+    np.savetxt("frequency_table.csv", transposed, delimiter=',', header=headers_str, fmt='%f',
+    comments='')  # fmt (format) specifies how the values should be represented eg. f means decimal floating point
+
+
+def create_frequency_table(filename):
+    # read in the table with Pandas package
     original_table = pd.read_csv(filename, delimiter=',')
-    #print(table)
-
-    # table.plot.hist(grid=True, bins=2, rwidth=10,
-    #            color='#607c8e')
-    # plt.title('cluster size distribution')
-    # plt.xlabel('Counts')
-    # plt.ylabel('cluster size')
-    # plt.grid(axis='y', alpha=0.75)
-    # plt.show()
-
-
-    # print(table["column1"])  #prints the whole specified column and prints its name and datatype in the end
-    # print(table["column1"] [0])  #access a specified row in the specified column
-
-    # for values in table["column1"]: #iterates over all rows in the specified column
-    #    print(values)
-
-    headers = []
-
+    # print(table)
     frequency_table = []
-
+    headers = []
     for column in original_table:
         print("\n", column)
         headers.append(column)
@@ -71,19 +74,11 @@ def main():
 
     print("\n", frequency_table)
 
-    np_table = np.asarray(frequency_table)
-    print("\n", np_table)
-
-    transposed = np.transpose(np_table)
-    print("\n", transposed)
-
     print("\n", headers)
     headers_str = ','.join(headers)
     print(headers_str)
 
-    # save the table and give it headers
-    np.savetxt("frequency_table.csv", transposed, delimiter=',', header=headers_str, fmt='%f',
-    comments='')  # fmt (format) specifies how the values should be represented eg. f means decimal floating point
+    return frequency_table, headers_str
 
 
 def get_table_path():
