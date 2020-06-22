@@ -24,8 +24,7 @@ def main():
     # frequency_table.insert(0, size_thresholds)  ##TODO: row headers
 
     # frequency distribution table
-    name = "frequency_table_{:.2f}_{:.2f}.csv".format(SMALL_THRESHOLD, MEDIUM_THRESHOLD)
-    numpy_and_save(frequency_table, table_path, name, column_headers, ROW_HEADERS)
+    numpy_and_save(frequency_table, table_path, "frequency_table.csv", column_headers, ROW_HEADERS)
 
     # area table
     name = "area_distribution_table_{:.2f}_{:.2f}.csv".format(SMALL_THRESHOLD, MEDIUM_THRESHOLD)
